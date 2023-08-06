@@ -1,19 +1,24 @@
 import * as React from 'react';
-
-import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'react-native-slide-drawer';
+import { StyleSheet, View, Text, Button, SafeAreaView } from 'react-native';
+import SlideDrawer from 'react-native-slide-drawer';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
-
-  React.useEffect(() => {
-    multiply(3, 7).then(setResult);
-  }, []);
+  const [isOpen, setIsOpen] = React.useState<boolean>(false);
 
   return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <SlideDrawer isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <Text style={{ color: 'white', fontSize: 16 }}>item 1</Text>
+        <Text style={{ color: 'white', fontSize: 16 }}>item 2</Text>
+        <Text style={{ color: 'white', fontSize: 16 }}>item 3</Text>
+        <Text style={{ color: 'white', fontSize: 16 }}>item 4</Text>
+        <Text style={{ color: 'white', fontSize: 16 }}>item 5</Text>
+        <Text style={{ color: 'white', fontSize: 16 }}>item 6</Text>
+      </SlideDrawer>
+      <Button title="open drawer" onPress={() => setIsOpen(true)}>
+        open drawer
+      </Button>
+    </SafeAreaView>
   );
 }
 

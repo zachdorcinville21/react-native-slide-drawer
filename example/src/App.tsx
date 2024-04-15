@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, Button, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, Button, SafeAreaView } from 'react-native';
 import SlideDrawer from 'react-native-slide-drawer';
 
 export default function App() {
@@ -7,7 +7,7 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <SlideDrawer isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      <SlideDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} side='left'>
         <Text style={{ color: 'white', fontSize: 16 }}>item 1</Text>
         <Text style={{ color: 'white', fontSize: 16 }}>item 2</Text>
         <Text style={{ color: 'white', fontSize: 16 }}>item 3</Text>
@@ -18,6 +18,10 @@ export default function App() {
       <Button title="open drawer" onPress={() => setIsOpen(true)}>
         open drawer
       </Button>
+      <Button title="close drawer" onPress={() => setIsOpen(false)}>
+        close drawer
+      </Button>
+      <Text style={{position: 'absolute', left: 0, color: '#fff', zIndex: 1}}>hello there</Text>
     </SafeAreaView>
   );
 }

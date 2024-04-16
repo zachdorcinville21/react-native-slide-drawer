@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Dimensions } from 'react-native';
+import { Pressable } from 'react-native';
 import { useWindowDimensions } from 'react-native';
-import { TouchableWithoutFeedback, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import {
   Gesture,
   GestureDetector,
@@ -10,15 +11,13 @@ import {
 import Animated, {
   FadeIn,
   FadeOut,
-  SlideInRight,
-  SlideOutRight,
   useSharedValue,
   useAnimatedStyle,
   runOnJS,
   withTiming,
 } from 'react-native-reanimated';
 
-const { height, width } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
 interface SlideDrawerProps {
   isOpen: boolean;
@@ -27,17 +26,19 @@ interface SlideDrawerProps {
   side?: 'left' | 'right';
 }
 
-const maxWidth = 250;
-const autoClosePointLeft = -160;
-const autoClosePointRight = 160;
-const closedLeftValue = -maxWidth;
+const MAX_WIDTH = 250;
+const AUTO_CLOSE_POINT_LEFT = -160;
+const AUTO_CLOSE_POINT_RIGHT = 160;
+const CLOSED_LEFT_VALUE = -MAX_WIDTH;
+const ANIMATION_DURATION = 300;
 
 export default function SlideDrawer(props: SlideDrawerProps) {
   const { isOpen, onClose, children, side = 'left' } = props;
 
   const isLeft = side === 'left';
 
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
+  
   const drawerX = useSharedValue<number>(0);
 
   const panGesture = Gesture.Pan()
@@ -48,16 +49,20 @@ export default function SlideDrawer(props: SlideDrawerProps) {
       drawerX.value = event.translationX;
     })
     .onFinalize((event) => {
-      if (event.translationX <= autoClosePointLeft && isLeft) {
+      if (event.translationX <= AUTO_CLOSE_POINT_LEFT && isLeft) {
         runOnJS(onClose)();
-        drawerX.value = withTiming(0, { duration: 400 });
-      } else if (event.translationX >= autoClosePointRight && !isLeft) {
+      } else if (event.translationX >= AUTO_CLOSE_POINT_RIGHT && !isLeft) {
         runOnJS(onClose)();
-        drawerX.value = withTiming(0, { duration: 400 });
       } else {
-        drawerX.value = withTiming(0, { duration: 400 });
+        drawerX.value = withTiming(0, { duration: ANIMATION_DURATION });
       }
     });
+
+  useEffect(() => {
+    if (isOpen) {
+      drawerX.value = 0;
+    }
+  }, [isOpen]);
 
   const animatedDrawerStyle = useAnimatedStyle(() => ({
     transform: [
@@ -68,40 +73,57 @@ export default function SlideDrawer(props: SlideDrawerProps) {
     right: isLeft
       ? undefined
       : isOpen
-      ? withTiming(0, { duration: 400 })
-      : withTiming(closedLeftValue, { duration: 400 }),
+      ? withTiming(0, { duration: ANIMATION_DURATION })
+      : withTiming(CLOSED_LEFT_VALUE, { duration: ANIMATION_DURATION }),
     left: isLeft
       ? isOpen
-        ? withTiming(0, { duration: 400 })
-        : withTiming(closedLeftValue, { duration: 400 })
+        ? withTiming(0, { duration: 300 })
+        : withTiming(CLOSED_LEFT_VALUE, { duration: ANIMATION_DURATION })
       : undefined,
   }));
 
   return (
-    <GestureHandlerRootView style={{ flex: 1, width: '100%' }}>
-      <TouchableWithoutFeedback
-        onPress={onClose}
-        style={{ flex: 1, width, zIndex: 2 }}
-      >
-        <Animated.View
-          entering={FadeIn}
-          exiting={FadeOut}
+    <GestureHandlerRootView
+      style={{
+        flex: 1,
+        width: '100%',
+        zIndex: 2,
+        pointerEvents: isOpen ? undefined : 'none',
+        height,
+        position: 'absolute',
+      }}
+    >
+      {/* Backdrop */}
+      {isOpen ? (
+        <Pressable
+          onPress={onClose}
           style={{
             flex: 1,
             width,
             height,
-            backgroundColor: isOpen ? 'rgba(0, 0, 0, 0.5)' : 'transparent',
-            position: 'absolute',
             zIndex: 2,
           }}
         >
-          <GestureDetector gesture={panGesture}>
-            <Animated.View style={[styles.container, animatedDrawerStyle]}>
-              {children}
-            </Animated.View>
-          </GestureDetector>
+          <Animated.View
+            entering={FadeIn}
+            exiting={FadeOut}
+            style={{
+              flex: 1,
+              width: '100%',
+              zIndex: 2,
+              pointerEvents: isOpen ? undefined : 'none',
+              height,
+              backgroundColor: isOpen ? 'rgba(0, 0, 0, 0.5)' : 'transparent',
+              position: 'absolute',
+            }}
+          />
+        </Pressable>
+      ) : null}
+      <GestureDetector gesture={panGesture}>
+        <Animated.View style={[styles.container, animatedDrawerStyle]}>
+          {children}
         </Animated.View>
-      </TouchableWithoutFeedback>
+      </GestureDetector>
     </GestureHandlerRootView>
   );
 }
@@ -109,7 +131,7 @@ export default function SlideDrawer(props: SlideDrawerProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: maxWidth,
+    width: MAX_WIDTH,
     height,
     backgroundColor: 'black',
     alignItems: 'flex-start',
@@ -118,5 +140,6 @@ const styles = StyleSheet.create({
     paddingTop: 80,
     gap: 24,
     paddingLeft: 24,
+    position: 'absolute',
   },
 });

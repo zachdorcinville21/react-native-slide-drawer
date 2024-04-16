@@ -7,7 +7,7 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <SlideDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} side='left'>
+      <SlideDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} side='right'>
         <Text style={{ color: 'white', fontSize: 16 }}>item 1</Text>
         <Text style={{ color: 'white', fontSize: 16 }}>item 2</Text>
         <Text style={{ color: 'white', fontSize: 16 }}>item 3</Text>

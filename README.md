@@ -1,6 +1,6 @@
 # react-native-slide-drawer
 
-A smooth animating side drawer for React Native
+A smooth animating side drawer for React Native built with [Reanimated](https://docs.swmansion.com/react-native-reanimated/).
 
 ## Installation
 
@@ -11,16 +11,44 @@ npm install react-native-slide-drawer
 ## Usage
 
 ```js
-import { multiply } from 'react-native-slide-drawer';
+import { SlideDrawer } from 'react-native-slide-drawer';
 
-// ...
-
-const result = await multiply(3, 7);
+export default function App() {
+  const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  
+  return (
+    <SafeAreaView style={styles.container}>
+      <SlideDrawer
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        side="right"
+      >
+        <Text style={{ color: 'white', fontSize: 16 }}>item 1</Text>
+        <Text style={{ color: 'white', fontSize: 16 }}>item 2</Text>
+        <Text style={{ color: 'white', fontSize: 16 }}>item 3</Text>
+        <Text style={{ color: 'white', fontSize: 16 }}>item 4</Text>
+        <Text style={{ color: 'white', fontSize: 16 }}>item 5</Text>
+        <Text style={{ color: 'white', fontSize: 16 }}>item 6</Text>
+      </SlideDrawer>
+      <Button title="open drawer" onPress={() => setIsOpen(true)}>
+        open drawer
+      </Button>
+      <Button title="close drawer" onPress={() => setIsOpen(false)}>
+        close drawer
+      </Button>
+    </SafeAreaView>
+  );
+}
 ```
 
-## Contributing
-
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+## Props
+| name            | type                      | required | description                                 |
+| --------------- | ------------------------- | -------- | ------------------------------------------- |
+| isOpen          | boolean                   | true     | Controls whether the drawer is open or not. |
+| onClose         | Function                  | true     | Function to close the drawer.               |
+| children        | ReactNode                 | true     | The content contained within the drawer.    |
+| containerStyle  | SlideDrawerContainerStyle | false    | Styles for the drawer container.            |
+| backdropOpacity | number                    | false    | Opacity for the drawer backdrop.            |
 
 ## License
 

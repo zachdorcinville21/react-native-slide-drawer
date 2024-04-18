@@ -16,29 +16,31 @@ import Animated, {
   runOnJS,
   withTiming,
 } from 'react-native-reanimated';
+import type { SlideDrawerProps } from './SlideDrawer';
+import {
+  AUTO_CLOSE_POINT_LEFT,
+  AUTO_CLOSE_POINT_RIGHT,
+  ANIMATION_DURATION,
+  CLOSED_VALUE,
+  MAX_WIDTH,
+} from './constants';
 
 const { height } = Dimensions.get('window');
 
-interface SlideDrawerProps {
-  isOpen: boolean;
-  onClose: () => void;
-  children: React.ReactNode;
-  side?: 'left' | 'right';
-}
-
-const MAX_WIDTH = 250;
-const AUTO_CLOSE_POINT_LEFT = -160;
-const AUTO_CLOSE_POINT_RIGHT = 160;
-const CLOSED_LEFT_VALUE = -MAX_WIDTH;
-const ANIMATION_DURATION = 300;
-
-export default function SlideDrawer(props: SlideDrawerProps) {
-  const { isOpen, onClose, children, side = 'left' } = props;
+export function SlideDrawer(props: SlideDrawerProps) {
+  const {
+    isOpen,
+    onClose,
+    children,
+    side = 'left',
+    containerStyle,
+    backdropOpacity,
+  } = props;
 
   const isLeft = side === 'left';
 
   const { width, height } = useWindowDimensions();
-  
+
   const drawerX = useSharedValue<number>(0);
 
   const panGesture = Gesture.Pan()
@@ -74,11 +76,11 @@ export default function SlideDrawer(props: SlideDrawerProps) {
       ? undefined
       : isOpen
       ? withTiming(0, { duration: ANIMATION_DURATION })
-      : withTiming(CLOSED_LEFT_VALUE, { duration: ANIMATION_DURATION }),
+      : withTiming(CLOSED_VALUE, { duration: ANIMATION_DURATION }),
     left: isLeft
       ? isOpen
         ? withTiming(0, { duration: 300 })
-        : withTiming(CLOSED_LEFT_VALUE, { duration: ANIMATION_DURATION })
+        : withTiming(CLOSED_VALUE, { duration: ANIMATION_DURATION })
       : undefined,
   }));
 
@@ -113,14 +115,18 @@ export default function SlideDrawer(props: SlideDrawerProps) {
               zIndex: 2,
               pointerEvents: isOpen ? undefined : 'none',
               height,
-              backgroundColor: isOpen ? 'rgba(0, 0, 0, 0.5)' : 'transparent',
+              backgroundColor: isOpen
+                ? `rgba(0, 0, 0, ${backdropOpacity ?? 0.5})`
+                : 'transparent',
               position: 'absolute',
             }}
           />
         </Pressable>
       ) : null}
       <GestureDetector gesture={panGesture}>
-        <Animated.View style={[styles.container, animatedDrawerStyle]}>
+        <Animated.View
+          style={[styles.container, animatedDrawerStyle, containerStyle]}
+        >
           {children}
         </Animated.View>
       </GestureDetector>

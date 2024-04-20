@@ -8,6 +8,12 @@ A smooth animating side drawer for React Native built with [Reanimated](https://
 npm install react-native-slide-drawer
 ```
 
+### Dependencies
+This library requires these dependencies to be installed before you can use it:
+```sh
+npm install react-native-reanimated react-native-gesture-handler
+```
+
 ## Usage
 
 ```js

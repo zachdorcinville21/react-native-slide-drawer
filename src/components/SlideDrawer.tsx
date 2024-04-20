@@ -16,14 +16,14 @@ import Animated, {
   runOnJS,
   withTiming,
 } from 'react-native-reanimated';
-import type { SlideDrawerProps } from './SlideDrawer';
+import type { SlideDrawerProps } from 'src/SlideDrawer';
 import {
   AUTO_CLOSE_POINT_LEFT,
   AUTO_CLOSE_POINT_RIGHT,
   ANIMATION_DURATION,
   CLOSED_VALUE,
   MAX_WIDTH,
-} from './constants';
+} from '../constants';
 
 const { height } = Dimensions.get('window');
 
@@ -39,7 +39,7 @@ export function SlideDrawer(props: SlideDrawerProps) {
 
   const isLeft = side === 'left';
 
-  const { width, height } = useWindowDimensions();
+  const { width } = useWindowDimensions();
 
   const drawerX = useSharedValue<number>(0);
 
@@ -64,7 +64,7 @@ export function SlideDrawer(props: SlideDrawerProps) {
     if (isOpen) {
       drawerX.value = 0;
     }
-  }, [isOpen]);
+  }, [isOpen, drawerX]);
 
   const animatedDrawerStyle = useAnimatedStyle(() => ({
     transform: [

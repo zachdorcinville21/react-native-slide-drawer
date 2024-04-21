@@ -2,6 +2,8 @@
 
 A smooth animating side drawer for React Native built with [Reanimated](https://docs.swmansion.com/react-native-reanimated/).
 
+<img src='assets/drawer-demo.gif' />
+
 ## Installation
 
 ```sh

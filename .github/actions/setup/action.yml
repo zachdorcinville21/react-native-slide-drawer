@@ -1,6 +1,9 @@
 name: Setup
 description: Setup Node.js and install dependencies
 
+env:
+  YARN_ENABLE_IMMUTABLE_INSTALLS: false
+
 runs:
   using: composite
   steps:

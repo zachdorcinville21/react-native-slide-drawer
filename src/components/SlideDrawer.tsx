@@ -16,7 +16,7 @@ import Animated, {
   runOnJS,
   withTiming,
 } from 'react-native-reanimated';
-import type { SlideDrawerProps } from 'src/SlideDrawer';
+import type { SlideDrawerProps } from '../types';
 import {
   AUTO_CLOSE_POINT_LEFT,
   AUTO_CLOSE_POINT_RIGHT,

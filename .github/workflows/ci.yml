@@ -14,6 +14,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Enable Corepack before setting up Node
+        run: corepack enable
+
       - name: Setup
         uses: ./.github/actions/setup
 
@@ -29,6 +32,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Enable Corepack before setting up Node
+        run: corepack enable
+
       - name: Setup
         uses: ./.github/actions/setup
 
@@ -41,21 +47,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Enable Corepack before setting up Node
+        run: corepack enable
+
       - name: Setup
         uses: ./.github/actions/setup
 
       - name: Build package
         run: yarn prepack
-
-  build-web:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup
-        uses: ./.github/actions/setup
-
-      - name: Build example for Web
-        run: |
-          yarn example expo export:web

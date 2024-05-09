@@ -1,5 +1,4 @@
 import type { ViewStyle } from 'react-native';
-import type { StyleProp } from 'react-native';
 
 export type SlideDrawerContainerStyle = Omit<
   ViewStyle,

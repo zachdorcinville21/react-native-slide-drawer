@@ -26,6 +26,7 @@ runs:
     - name: Install dependencies
       if: steps.yarn-cache.outputs.cache-hit != 'true'
       run: |
+        yarn config set enableImmutableInstalls false
         yarn --cwd example install
         yarn install
       shell: bash

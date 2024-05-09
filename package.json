@@ -34,7 +34,8 @@
     "release": "release-it",
     "example": "yarn --cwd example",
     "bootstrap": "yarn example && yarn install",
-    "ios": "yarn example ios"
+    "ios": "yarn example ios",
+    "android": "yarn example android"
   },
   "keywords": [
     "react-native",
